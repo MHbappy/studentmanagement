@@ -5,6 +5,8 @@ import com.student.studentmanagement.repository.CourseRepository;
 import com.student.studentmanagement.service.CourseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +63,16 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> findAll() {
         log.debug("Request to get all Courses");
         return courseRepository.findAll();
+    }
+
+    @Override
+    public List<Course> findAllByIsActive(Boolean isActive) {
+        return courseRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
+    public Page<Course> findAllByIsActiveAndNameContaining(Boolean isActive, String name, Pageable pageable) {
+        return courseRepository.findAllByIsActiveAndNameContaining(isActive, name, pageable);
     }
 
     @Override

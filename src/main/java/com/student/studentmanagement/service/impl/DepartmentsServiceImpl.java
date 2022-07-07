@@ -61,6 +61,11 @@ public class DepartmentsServiceImpl implements DepartmentsService {
     }
 
     @Override
+    public List<Departments> findAllByIsActive(Boolean isActive) {
+        return departmentsRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Optional<Departments> findOne(Long id) {
         log.debug("Request to get Departments : {}", id);

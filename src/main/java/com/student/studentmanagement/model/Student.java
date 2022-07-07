@@ -30,8 +30,11 @@ public class Student implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "student_id", unique = true)
+    @Column(name = "student_id")
     private String studentId;
+
+    @Column(name = "contact_number")
+    private String contactNumber;
 
     @Column(name = "address")
     private String address;

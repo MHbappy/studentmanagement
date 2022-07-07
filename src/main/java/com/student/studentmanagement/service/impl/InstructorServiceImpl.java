@@ -70,6 +70,11 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
+    public List<Instructor> findAllByIsActive(Boolean isActive) {
+        return instructorRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Optional<Instructor> findOne(Long id) {
         log.debug("Request to get Instructor : {}", id);

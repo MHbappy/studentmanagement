@@ -29,7 +29,7 @@ public class Grade {
     private String name;
 
     @Column(name = "number")
-    private String number;
+    private Integer number;
 
     @Column(name = "is_active")
     private Boolean isActive;

@@ -67,6 +67,11 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public List<Assignment> findAllByIsActive(Boolean isActive) {
+        return assignmentRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Optional<Assignment> findOne(Long id) {
         log.debug("Request to get Assignment : {}", id);

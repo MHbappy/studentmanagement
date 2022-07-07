@@ -64,6 +64,11 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
+    public List<Grade> findAllByIsActive(Boolean isActive) {
+        return gradeRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Optional<Grade> findOne(Long id) {
         log.debug("Request to get Grade : {}", id);

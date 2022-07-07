@@ -4,6 +4,8 @@ import com.student.studentmanagement.repository.StudentRepository;
 import com.student.studentmanagement.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +68,16 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findAll() {
         log.debug("Request to get all Students");
         return studentRepository.findAll();
+    }
+
+    @Override
+    public List<Student> findAllByIsActive(Boolean isActive) {
+        return studentRepository.findAllByIsActive(isActive);
+    }
+
+    @Override
+    public Page<Student> findAllByStudentName(Boolean isActive, String name, Pageable pageable) {
+        return studentRepository.findAllByIsActiveAndNameContaining(isActive, name, pageable);
     }
 
     @Override

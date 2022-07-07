@@ -1,13 +1,10 @@
 package com.student.studentmanagement.model;
 
-import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Course.

@@ -1,15 +1,18 @@
 package com.student.studentmanagement.repository;
 
-import java.util.Optional;
-
-import com.student.studentmanagement.model.User;
+import com.student.studentmanagement.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data JPA repository for the {@link User} entity.
- */
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findOneByEmailIgnoreCase(String email);
+import javax.transaction.Transactional;
+import java.util.UUID;
+
+public interface UserRepository extends JpaRepository<Users, UUID> {
+
+    boolean existsByEmail(String email);
+
+    Users findByEmail(String email);
+
+    @Transactional
+    void deleteByEmail(String email);
+
 }
