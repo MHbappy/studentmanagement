@@ -15,7 +15,7 @@ public interface CourseService {
     Course save(Course course);
     Optional<Course> partialUpdate(Course course);
     List<Course> findAll();
-    List<Course> findAllByIsActive(Boolean isActive);
+    Page<Course> findAllByIsActive(Boolean isActive, Pageable pageable);
     Page<Course> findAllByIsActiveAndNameContaining(Boolean isActive, String name, Pageable pageable);
     Optional<Course> findOne(Long id);
     void delete(Long id);

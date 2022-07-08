@@ -15,6 +15,6 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    List<Course> findAllByIsActive(Boolean isActive);
+    Page<Course> findAllByIsActive(Boolean isActive, Pageable pageable);
     Page<Course> findAllByIsActiveAndNameContaining(Boolean isActive, String name, Pageable pageable);
 }

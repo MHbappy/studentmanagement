@@ -77,6 +77,9 @@ public class CourseResource {
     @GetMapping("/searchByName")
     public Page<Course> getAllCourses(@RequestParam String name, Pageable pageable) {
         log.debug("REST request to get all Courses");
+        if (name == null || name.isEmpty()){
+            return courseService.findAllByIsActive(true, pageable);
+        }
         return courseService.findAllByIsActiveAndNameContaining(true, name, pageable);
     }
 

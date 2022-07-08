@@ -66,8 +66,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findAllByIsActive(Boolean isActive) {
-        return courseRepository.findAllByIsActive(isActive);
+    public Page<Course> findAllByIsActive(Boolean isActive, Pageable pageable) {
+        return courseRepository.findAllByIsActive(isActive, pageable);
     }
 
     @Override
