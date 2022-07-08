@@ -26,6 +26,4 @@ public class Departments {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne
-    private Course course;
 }

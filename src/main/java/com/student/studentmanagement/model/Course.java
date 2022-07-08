@@ -29,4 +29,7 @@ public class Course {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @ManyToOne
+    Departments departments;
 }
