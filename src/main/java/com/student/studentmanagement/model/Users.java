@@ -1,6 +1,8 @@
 package com.student.studentmanagement.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -15,6 +17,8 @@ import java.util.UUID;
 @Table(name = "clients")
 @Data
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Users {
 
     @Id

@@ -37,6 +37,11 @@ public class DepartmentsResource {
         if (departments.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new departments cannot already have an ID");
         }
+
+        if (departmentsRepository.existsByNameAndIsActive(departments.getName(), true)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Department can not be duplicate");
+        }
+
         Departments result = departmentsService.save(departments);
         return ResponseEntity
             .created(new URI("/api/departments/" + result.getId()))

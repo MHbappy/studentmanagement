@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -16,6 +18,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "assignment")
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Assignment {
 
     @Id

@@ -5,7 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,6 +19,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "student")
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,4 +51,5 @@ public class Student implements Serializable {
 
     @ManyToOne
     private Departments departments;
+
 }

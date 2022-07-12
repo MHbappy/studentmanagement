@@ -1,6 +1,8 @@
 package com.student.studentmanagement.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -12,6 +14,8 @@ import javax.validation.constraints.*;
 @Table(name = "instructor")
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Instructor {
 
     @Id

@@ -42,6 +42,7 @@ public class UserService {
       appUser.setCreatedAt(LocalDateTime.now());
       appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
       userRepository.save(appUser);
+//      return "Account registered";
       return jwtTokenProvider.createToken(appUser.getEmail(), appUser.getAppUserRoles());
     } else {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Username is already in use");

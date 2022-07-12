@@ -3,7 +3,9 @@ package com.student.studentmanagement.model;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -13,6 +15,8 @@ import lombok.ToString;
 @Table(name = "course")
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

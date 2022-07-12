@@ -2,7 +2,10 @@ package com.student.studentmanagement.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -12,6 +15,8 @@ import lombok.ToString;
 @Table(name = "departments")
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Departments {
 
     @Id
@@ -20,7 +25,7 @@ public class Departments {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "is_active")

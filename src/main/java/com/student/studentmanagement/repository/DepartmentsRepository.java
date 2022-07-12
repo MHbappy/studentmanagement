@@ -14,5 +14,6 @@ import java.util.Optional;
 @Repository
 public interface DepartmentsRepository extends JpaRepository<Departments, Long> {
     List<Departments> findAllByIsActive(Boolean isActive);
+    Boolean existsByNameAndIsActive(String name, Boolean isActive);
 
 }

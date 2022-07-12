@@ -5,7 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,6 +19,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "grade")
 @Data
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Grade {
 
     @Id

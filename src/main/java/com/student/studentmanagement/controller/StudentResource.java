@@ -42,9 +42,11 @@ public class StudentResource {
         if (studentRepository.existsByStudentId(student.getStudentId())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
         }
+
         if (studentRepository.existsByContactNumber(student.getContactNumber())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an contact number.");
         }
+
         Student result = studentService.save(student);
         return ResponseEntity
             .created(new URI("/api/students/" + result.getId()))
@@ -61,6 +63,7 @@ public class StudentResource {
         if (student.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
         }
+
         if (!Objects.equals(id, student.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid ID.");
         }
