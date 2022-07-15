@@ -70,7 +70,6 @@ public class CourseResourceIT {
         restStudentMockMvc.perform(delete("/api/courses/{id}", id)).andExpect(status().isOk());
     }
 
-
     @Test
     void updatedCourses() throws Exception {
         Long id = 1l;

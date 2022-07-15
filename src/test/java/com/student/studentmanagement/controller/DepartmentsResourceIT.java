@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser(username = "admin@localhost", password = "admin", roles = "ADMIN")
 public class DepartmentsResourceIT {
 
-
     @MockBean
     DepartmentsRepository departmentsRepository;
 

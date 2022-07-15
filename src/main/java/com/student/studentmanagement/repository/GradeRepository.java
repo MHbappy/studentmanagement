@@ -15,5 +15,4 @@ import java.util.Optional;
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Long> {
     List<Grade> findAllByIsActive(Boolean isActive);
-
 }
