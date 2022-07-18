@@ -41,8 +41,8 @@ public class StudentServiceImpl implements StudentService {
             .findById(student.getId())
             .map(
                 existingStudent -> {
-                    if (student.getName() != null) {
-                        existingStudent.setName(student.getName());
+                    if (student.getFirstName() != null) {
+                        existingStudent.setFirstName(student.getFirstName());
                     }
                     if (student.getStudentId() != null) {
                         existingStudent.setStudentId(student.getStudentId());
@@ -77,7 +77,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Page<Student> findAllByStudentName(Boolean isActive, String name, Pageable pageable) {
-        return studentRepository.findAllByIsActiveAndNameContaining(isActive, name, pageable);
+        return studentRepository.findAllByIsActiveAndFirstNameContaining(isActive, name, pageable);
     }
 
     @Override

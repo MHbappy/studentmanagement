@@ -40,8 +40,8 @@ public class InstructorServiceImpl implements InstructorService {
             .findById(instructor.getId())
             .map(
                 existingInstructor -> {
-                    if (instructor.getName() != null) {
-                        existingInstructor.setName(instructor.getName());
+                    if (instructor.getFirstName() != null) {
+                        existingInstructor.setFirstName(instructor.getFirstName());
                     }
                     if (instructor.getTeacherId() != null) {
                         existingInstructor.setTeacherId(instructor.getTeacherId());

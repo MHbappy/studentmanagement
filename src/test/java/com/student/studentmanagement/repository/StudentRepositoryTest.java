@@ -1,6 +1,5 @@
 package com.student.studentmanagement.repository;
 
-import com.student.studentmanagement.model.Course;
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.service.StudentService;
@@ -46,8 +45,8 @@ public class StudentRepositoryTest {
     void test_findAllByIsActive(){
         Departments departments = new Departments();
         departments.setId(1l);
-        Student student1 = new Student(1l, "Mehedi", "123-35-322", "88888888", "address", 12, true, departments);
-        Student student2 = new Student(2l, "Mehedi Hasan", "123-35-321", "88888888", "address", 12, true, departments);
+        Student student1 = new Student(1l, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
+        Student student2 = new Student(2l, "Mehedi1", "Hasan1", "local@local", "123-35-321", "88888888", "address", 12, true, departments);
         List<Student> studentList = new ArrayList<>();
         studentList.add(student1);
         studentList.add(student2);
@@ -61,8 +60,8 @@ public class StudentRepositoryTest {
 
         Departments departments = new Departments();
         departments.setId(1l);
-        Student student1 = new Student(1l, "Mehedi", "123-35-322", "88888888", "address", 12, true, departments);
-        Student student2 = new Student(2l, "Mehedi Hasan", "123-35-321", "88888888", "address", 12, true, departments);
+        Student student1 = new Student(1l, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
+        Student student2 = new Student(2l, "Mehedi1", "Hasan1", "local@local", "123-35-321", "88888888", "address", 12, true, departments);
         Pageable pageable = PageRequest.of(0, 2);
 
 
@@ -73,8 +72,8 @@ public class StudentRepositoryTest {
         Page<Student> page = new PageImpl<>(studentList, pageable, studentList.size());
 
 
-        when(studentRepository.findAllByIsActiveAndNameContaining(true, "Me", pageable)).thenReturn(page);
-        Assertions.assertEquals(2, studentRepository.findAllByIsActiveAndNameContaining(true, "Me", pageable).getTotalElements());
+        when(studentRepository.findAllByIsActiveAndFirstNameContaining(true, "Me", pageable)).thenReturn(page);
+        Assertions.assertEquals(2, studentRepository.findAllByIsActiveAndFirstNameContaining(true, "Me", pageable).getTotalElements());
 
     }
 }

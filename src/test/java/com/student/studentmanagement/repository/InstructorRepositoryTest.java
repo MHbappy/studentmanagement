@@ -31,8 +31,8 @@ public class InstructorRepositoryTest {
         Departments departments = new Departments();
         departments.setId(1l);
 
-        Instructor instructor1 = new Instructor(1l, "Instructor Name1", "str1", 20, "", true, departments);
-        Instructor instructor2 = new Instructor(2l, "Instructor Name2", "str2", 20, "", true, departments);
+        Instructor instructor1 = new Instructor(1l, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
+        Instructor instructor2 = new Instructor(2l, "Instructor2", "Name2", "local@local", "0000000", "str2", 20, "", true, departments);
 
         List<Instructor> instructors = new ArrayList<>();
         instructors.add(instructor1);

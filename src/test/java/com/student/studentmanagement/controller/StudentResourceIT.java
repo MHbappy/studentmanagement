@@ -40,7 +40,7 @@ public class StudentResourceIT {
     void createStudent() throws Exception {
         Departments departments = new Departments();
         departments.setId(1l);
-        Student student = new Student(1l, "Mehedi", "123-35-322", "88888888", "address", 12, true, departments);
+        Student student = new Student(1l, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
         when(studentService.save(student)).thenReturn(student);
 
         restStudentMockMvc.perform(post("/api/students").contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +54,7 @@ public class StudentResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Student student = new Student(id, "Mehedi", "123-35-322", "88888888", "address", 12, true, departments);
+        Student student = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
         when(studentRepository.findById(id)).thenReturn(Optional.of(student));
         restStudentMockMvc.perform(get("/api/students/{id}", id)).andExpect(status().isOk());
     }
@@ -65,7 +65,7 @@ public class StudentResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Student student = new Student(id, "Mehedi", "123-35-322", "88888888", "address", 12, true, departments);
+        Student student = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
         when(studentRepository.findById(id)).thenReturn(Optional.of(student));
         restStudentMockMvc.perform(delete("/api/students/{id}", id)).andExpect(status().isOk());
     }
@@ -76,8 +76,8 @@ public class StudentResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Student studentExist = new Student(id, "Mehedi", "123-35-322", "88888888", "address", 12, true, departments);
-        Student studentUpdate = new Student(id, "Bappy", "123-35-322", "88888888", "address", 12, true, departments);
+        Student studentExist = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
+        Student studentUpdate = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", 12, true, departments);
         when(studentService.save(studentUpdate)).thenReturn(studentUpdate);
         when(studentRepository.findById(id)).thenReturn(Optional.of(studentUpdate));
         restStudentMockMvc.perform(get("/api/students/{id}", id)).andExpect(status().isOk());

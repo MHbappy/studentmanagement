@@ -15,5 +15,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Boolean existsByContactNumber(String contactNumber);
     Boolean existsByStudentId(String studentId);
     List<Student> findAllByIsActive(Boolean isActive);
-    Page<Student> findAllByIsActiveAndNameContaining(Boolean isActive, String name, Pageable pageable);
+    Page<Student> findAllByIsActiveAndFirstNameContaining(Boolean isActive, String name, Pageable pageable);
 }

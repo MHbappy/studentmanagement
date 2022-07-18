@@ -42,7 +42,8 @@ public class InstructorResourceIT {
     void createInstructor() throws Exception {
         Departments departments = new Departments();
         departments.setId(1l);
-        Instructor instructor = new Instructor(null, "Instructor Name", "str", 20, "", true, departments);
+        Instructor instructor =  new Instructor(null, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
+
         when(instructorService.save(instructor)).thenReturn(instructor);
         restStudentMockMvc.perform(post("/api/instructors").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(instructor)))
@@ -55,7 +56,8 @@ public class InstructorResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Instructor instructor = new Instructor(null, "Instructor Name", "str", 20, "", true, departments);
+        Instructor instructor = new Instructor(null, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
+
         when(instructorRepository.findById(id)).thenReturn(Optional.of(instructor));
         restStudentMockMvc.perform(get("/api/instructors/{id}", id)).andExpect(status().isOk());
     }
@@ -65,7 +67,7 @@ public class InstructorResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Instructor instructor = new Instructor(null, "Instructor Name", "str", 20, "", true, departments);
+        Instructor instructor = new Instructor(null, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
         when(instructorRepository.findById(id)).thenReturn(Optional.of(instructor));
         restStudentMockMvc.perform(delete("/api/instructors/{id}", id)).andExpect(status().isOk());
     }
@@ -76,8 +78,9 @@ public class InstructorResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Instructor instructorSave = new Instructor(1l, "Instructor Name", "str", 20, "", true, departments);
-        Instructor instructorReturn = new Instructor(null, "Instructor another name", "str", 20, "", true, departments);
+        Instructor instructorSave = new Instructor(1l, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
+        Instructor instructorReturn = new Instructor(null, "Instructor2", "Name2", "local@local", "0000000", "str2", 20, "", true, departments);
+
         when(instructorService.save(instructorSave)).thenReturn(instructorSave);
         when(instructorService.findOne(id)).thenReturn(Optional.of(instructorReturn));
         when(instructorRepository.existsById(id)).thenReturn(true);
