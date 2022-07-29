@@ -115,7 +115,7 @@ public class StudentResource {
         return ResponseEntity.ok(false);
     }
 
-    @GetMapping("/courseByCourseId")
+    @GetMapping("/studentByCourseId")
     public List<Student> getAllStudentsByCourse(@RequestParam Long courseId) {
         return studentRepository.getAllStudentsByCourse(courseId);
     }
