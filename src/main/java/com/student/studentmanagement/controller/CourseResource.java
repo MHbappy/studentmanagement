@@ -1,9 +1,11 @@
 package com.student.studentmanagement.controller;
 
+import com.student.studentmanagement.dto.CourseDTO;
 import com.student.studentmanagement.model.Assignment;
 import com.student.studentmanagement.model.Course;
 import com.student.studentmanagement.repository.CourseRepository;
 import com.student.studentmanagement.service.CourseService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -27,29 +29,37 @@ public class CourseResource {
     private final Logger log = LoggerFactory.getLogger(CourseResource.class);
     private final CourseService courseService;
     private final CourseRepository courseRepository;
+    private final ModelMapper modelMapper;
 
-    public CourseResource(CourseService courseService, CourseRepository courseRepository) {
+    public CourseResource(CourseService courseService, CourseRepository courseRepository, ModelMapper modelMapper) {
         this.courseService = courseService;
         this.courseRepository = courseRepository;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/courses")
-    public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) throws URISyntaxException {
-        log.debug("REST request to save Course : {}", course);
+    public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseDTO courseDTO) throws URISyntaxException {
+        log.debug("REST request to save Course : {}", courseDTO);
+        Course course = modelMapper.map(courseDTO, Course.class);
+
         if (course.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new course cannot already have an ID");
         }
         Course result = courseService.save(course);
+
+        CourseDTO courseDTOResult = modelMapper.map(result, CourseDTO.class);
         return ResponseEntity
             .created(new URI("/api/courses/" + result.getId()))
-            .body(result);
+            .body(courseDTOResult);
     }
 
     @PutMapping("/courses/{id}")
-    public ResponseEntity<Course> updateCourse(
+    public ResponseEntity<CourseDTO> updateCourse(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Course course
+        @Valid @RequestBody CourseDTO courseDTO
     ) throws URISyntaxException {
+        Course course = modelMapper.map(courseDTO, Course.class);
+
         log.debug("REST request to update Course : {}, {}", id, course);
         if (course.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid id");
@@ -62,9 +72,10 @@ public class CourseResource {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid id");
         }
         Course result = courseService.save(course);
+        CourseDTO courseDTOResult = modelMapper.map(result, CourseDTO.class);
         return ResponseEntity
             .ok()
-            .body(result);
+            .body(courseDTOResult);
     }
 
 //    @GetMapping("/courses")

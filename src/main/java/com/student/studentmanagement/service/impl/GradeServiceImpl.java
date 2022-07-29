@@ -1,7 +1,10 @@
 package com.student.studentmanagement.service.impl;
 
 import com.student.studentmanagement.model.Grade;
+import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.repository.GradeRepository;
+import com.student.studentmanagement.repository.StudentRepository;
+import com.student.studentmanagement.security.SecurityUtils;
 import com.student.studentmanagement.service.GradeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +25,14 @@ public class GradeServiceImpl implements GradeService {
 
     private final GradeRepository gradeRepository;
 
-    public GradeServiceImpl(GradeRepository gradeRepository) {
+    private final SecurityUtils securityUtils;
+
+    private final StudentRepository studentRepository;
+
+    public GradeServiceImpl(GradeRepository gradeRepository, SecurityUtils securityUtils, StudentRepository studentRepository) {
         this.gradeRepository = gradeRepository;
+        this.securityUtils = securityUtils;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -65,6 +74,10 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public List<Grade> findAllByIsActive(Boolean isActive) {
+        Student student = studentRepository.findByUseName(securityUtils.getUserName());
+        if (securityUtils.getRoles().contains("ROLE_CLIENT")){
+            gradeRepository.findAllByStudentAndIsActive(student, true);
+        }
         return gradeRepository.findAllByIsActive(isActive);
     }
 

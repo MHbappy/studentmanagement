@@ -12,6 +12,7 @@ public interface StudentService {
     Optional<Student> partialUpdate(Student student);
     List<Student> findAll();
     List<Student> findAllByIsActive(Boolean isActive);
+    List<Student> getAllStudentsByCourse(Long courseId);
     Page<Student> findAllByStudentName(Boolean isActive, String name, Pageable pageable);
     Optional<Student> findOne(Long id);
     void delete(Long id);

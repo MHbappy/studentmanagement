@@ -2,7 +2,7 @@ package com.student.studentmanagement.repository;
 
 import com.student.studentmanagement.model.Grade;
 import com.student.studentmanagement.model.Student;
-import com.student.studentmanagement.service.GradeService;
+import com.student.studentmanagement.service.GradeServiceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class GradeRepositoryTest {
     GradeRepository gradeRepository;
 
     @Autowired
-    GradeService gradeService;
+    GradeServiceTest gradeService;
 
     @Test
     void test_findAllByIsActive(){

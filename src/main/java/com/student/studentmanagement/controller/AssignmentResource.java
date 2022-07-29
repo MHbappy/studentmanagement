@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -31,11 +34,13 @@ public class AssignmentResource {
     }
 
     @PostMapping("/assignments")
-    public ResponseEntity<Assignment> createAssignment(@RequestBody Assignment assignment) throws URISyntaxException {
+    public ResponseEntity<Assignment> createAssignment(@Valid  @RequestBody Assignment assignment, Authentication authentication) throws URISyntaxException {
         log.debug("REST request to save Assignment : {}", assignment);
         if (assignment.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new assignment cannot already have an ID");
         }
+        String name = authentication.getName();
+
         Assignment result = assignmentService.save(assignment);
         return ResponseEntity
                 .created(new URI("/api/assignments/" + result.getId()))
@@ -65,9 +70,9 @@ public class AssignmentResource {
     }
 
     @GetMapping("/assignments")
-    public List<Assignment> getAllAssignments() {
+    public List<Assignment> getAllAssignments(HttpServletRequest req) {
         log.debug("REST request to get all Assignments");
-        return assignmentService.findAllByIsActive(true);
+        return assignmentService.findAllByIsActive(true, req);
     }
 
     @GetMapping("/assignments/{id}")

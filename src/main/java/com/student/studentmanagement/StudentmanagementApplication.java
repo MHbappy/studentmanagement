@@ -17,8 +17,9 @@ import java.util.Arrays;
 @SpringBootApplication
 @OpenAPIDefinition
 public class StudentmanagementApplication implements CommandLineRunner {
+
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudentmanagementApplication.class, args);
@@ -34,22 +35,20 @@ public class StudentmanagementApplication implements CommandLineRunner {
 		try {
 			Users usersAdmin = userService.search("admin@localhost");
 			Users user = userService.search("user@localhost");
-
 		}catch (Exception exception){
+			Users admin = new Users();
+			admin.setFirstname("admin");
+			admin.setPassword("admin");
+			admin.setEmail("admin@localhost");
+			admin.setAppUserRoles(new ArrayList<UserRole>(Arrays.asList(UserRole.ROLE_ADMIN)));
+			userService.signup(admin);
 
-				Users admin = new Users();
-				admin.setFirstname("admin");
-				admin.setPassword("admin");
-				admin.setEmail("admin@localhost");
-				admin.setAppUserRoles(new ArrayList<UserRole>(Arrays.asList(UserRole.ROLE_ADMIN)));
-				userService.signup(admin);
-
-				Users client = new Users();
-				client.setFirstname("user");
-				client.setPassword("user");
-				client.setEmail("user@localhost");
-				client.setAppUserRoles(new ArrayList<UserRole>(Arrays.asList(UserRole.ROLE_CLIENT)));
-				userService.signup(client);
+			Users client = new Users();
+			client.setFirstname("user");
+			client.setPassword("user");
+			client.setEmail("user@localhost");
+			client.setAppUserRoles(new ArrayList<UserRole>(Arrays.asList(UserRole.ROLE_CLIENT)));
+			userService.signup(client);
 		}
 	}
 

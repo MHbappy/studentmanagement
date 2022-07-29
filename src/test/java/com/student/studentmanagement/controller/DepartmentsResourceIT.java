@@ -2,12 +2,8 @@ package com.student.studentmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.student.studentmanagement.model.Departments;
-import com.student.studentmanagement.model.Grade;
-import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.repository.DepartmentsRepository;
-import com.student.studentmanagement.repository.GradeRepository;
 import com.student.studentmanagement.service.DepartmentsService;
-import com.student.studentmanagement.service.GradeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

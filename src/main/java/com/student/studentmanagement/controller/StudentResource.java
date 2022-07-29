@@ -1,7 +1,9 @@
 package com.student.studentmanagement.controller;
+import com.student.studentmanagement.dto.StudentDTO;
 import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.repository.StudentRepository;
 import com.student.studentmanagement.service.StudentService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -25,15 +28,19 @@ public class StudentResource {
     private final Logger log = LoggerFactory.getLogger(StudentResource.class);
     private final StudentService studentService;
     private final StudentRepository studentRepository;
+    private final ModelMapper modelMapper;
 
-    public StudentResource(StudentService studentService, StudentRepository studentRepository) {
+    public StudentResource(StudentService studentService, StudentRepository studentRepository, ModelMapper modelMapper) {
         this.studentService = studentService;
         this.studentRepository = studentRepository;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/students")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) throws URISyntaxException {
+    public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) throws URISyntaxException {
+        Student student = modelMapper.map(studentDTO, Student.class);
+
         log.debug("REST request to save Student : {}", student);
         if (student.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
@@ -46,19 +53,20 @@ public class StudentResource {
         if (studentRepository.existsByContactNumber(student.getContactNumber())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an contact number.");
         }
-
         Student result = studentService.save(student);
+        StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
         return ResponseEntity
-            .created(new URI("/api/students/" + result.getId()))
-            .body(result);
+            .created(new URI("/api/students/" + studentDTOResult.getId()))
+            .body(studentDTOResult);
     }
 
     @PutMapping("/students/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Student> updateStudent(
+    public ResponseEntity<StudentDTO> updateStudent(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Student student
+         @RequestBody StudentDTO studentDTO
     ) {
+        Student student = modelMapper.map(studentDTO, Student.class);
         log.debug("REST request to update Student : {}, {}", id, student);
         if (student.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
@@ -73,11 +81,11 @@ public class StudentResource {
         }
 
         Student result = studentService.save(student);
+        StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
         return ResponseEntity
             .ok()
-            .body(result);
+            .body(studentDTOResult);
     }
-
 
     @GetMapping("/searchByStudentName")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -105,5 +113,10 @@ public class StudentResource {
             return ResponseEntity.ok(true);
         }
         return ResponseEntity.ok(false);
+    }
+
+    @GetMapping("/courseByCourseId")
+    public List<Student> getAllStudentsByCourse(@RequestParam Long courseId) {
+        return studentRepository.getAllStudentsByCourse(courseId);
     }
 }

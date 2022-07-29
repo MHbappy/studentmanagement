@@ -2,8 +2,10 @@ package com.student.studentmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.student.studentmanagement.model.Assignment;
+import com.student.studentmanagement.model.Course;
 import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.repository.AssignmentRepository;
+import com.student.studentmanagement.repository.CourseRepository;
 import com.student.studentmanagement.service.AssignmentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +38,21 @@ public class AssignmentResourceIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private CourseRepository courseRepository;
+
 
     @Test
     void createAssignment() throws Exception {
         Long id = 1l;
         Student student = new Student();
         student.setId(1l);
-        Assignment assignmentSave = new Assignment(1l, "assignment", new byte[2], "pdf", true, student);
-        Assignment assignmentReturn = new Assignment(null, "assignment", new byte[2], "pdf", true, student);
+        Optional<Course> course = courseRepository.findById(1l);
+        Course course1 = new Course();
+        course1.setId(1l);
+
+        Assignment assignmentSave = new Assignment(1l, "assignment", new byte[2], "pdf", true, course.isEmpty() ? null : course.get(), student);
+        Assignment assignmentReturn = new Assignment(null, "assignment", new byte[2], "pdf", true, course.isEmpty() ? null : course.get(), student);
         when(assignmentService.save(assignmentReturn)).thenReturn(assignmentReturn);
 
         restStudentMockMvc.perform(post("/api/assignments").contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +66,9 @@ public class AssignmentResourceIT {
         Long id = 1l;
         Student student = new Student();
         student.setId(1l);
-        Assignment assignmentSave = new Assignment(id, "assignment", new byte[2], "pdf", true, student);
+        Optional<Course> course = courseRepository.findById(1l);
+
+        Assignment assignmentSave = new Assignment(id, "assignment", new byte[2], "pdf", true,course.isEmpty() ? null : course.get(), student);
         when(assignmentRepository.findById(id)).thenReturn(Optional.of(assignmentSave));
         restStudentMockMvc.perform(get("/api/assignments/{id}", id)).andExpect(status().isOk());
     }
@@ -69,7 +80,9 @@ public class AssignmentResourceIT {
         Long id = 1l;
         Student student = new Student();
         student.setId(1l);
-        Assignment assignmentDelete = new Assignment(id, "assignment", new byte[2], "pdf", true, student);
+        Optional<Course> course = courseRepository.findById(1l);
+
+        Assignment assignmentDelete = new Assignment(id, "assignment", new byte[2], "pdf", true, course.isEmpty() ? null : course.get(), student);
         when(assignmentRepository.findById(id)).thenReturn(Optional.of(assignmentDelete));
         restStudentMockMvc.perform(delete("/api/assignments/{id}", id)).andExpect(status().isOk());
     }
@@ -80,8 +93,10 @@ public class AssignmentResourceIT {
         Long id = 1l;
         Student student = new Student();
         student.setId(1l);
-        Assignment assignmentSave = new Assignment(1l, "assignment", new byte[2], "pdf", true, student);
-        Assignment studentUpdate = new Assignment(1l, "assignment123", new byte[2], "pdf", true, student);
+        Optional<Course> course = courseRepository.findById(1l);
+
+        Assignment assignmentSave = new Assignment(1l, "assignment", new byte[2], "pdf", true, course.isEmpty() ? null : course.get(), student);
+        Assignment studentUpdate = new Assignment(1l, "assignment123", new byte[2], "pdf", true, course.isEmpty() ? null : course.get(), student);
         when(assignmentService.save(assignmentSave)).thenReturn(assignmentSave);
         when(assignmentService.findOne(id)).thenReturn(Optional.of(studentUpdate));
         when(assignmentRepository.existsById(id)).thenReturn(true);

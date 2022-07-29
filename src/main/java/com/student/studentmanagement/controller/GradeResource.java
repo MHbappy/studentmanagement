@@ -1,9 +1,11 @@
 package com.student.studentmanagement.controller;
 
+import com.student.studentmanagement.dto.GradeDTO;
 import com.student.studentmanagement.model.Grade;
 import com.student.studentmanagement.model.Instructor;
 import com.student.studentmanagement.repository.GradeRepository;
 import com.student.studentmanagement.service.GradeService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,27 +28,34 @@ public class GradeResource {
     private final Logger log = LoggerFactory.getLogger(GradeResource.class);
     private final GradeService gradeService;
     private final GradeRepository gradeRepository;
+    private final ModelMapper modelMapper;
 
-    public GradeResource(GradeService gradeService, GradeRepository gradeRepository) {
+
+    public GradeResource(GradeService gradeService, GradeRepository gradeRepository, ModelMapper modelMapper) {
         this.gradeService = gradeService;
         this.gradeRepository = gradeRepository;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/grades")
-    public ResponseEntity<Grade> createGrade(@Valid @RequestBody Grade grade) throws URISyntaxException {
+    public ResponseEntity<GradeDTO> createGrade(@Valid @RequestBody GradeDTO gradeDTO) throws URISyntaxException {
+        Grade grade = modelMapper.map(gradeDTO, Grade.class);
         log.debug("REST request to save Grade : {}", grade);
         if (grade.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new grade cannot already have an ID");
         }
         Grade result = gradeService.save(grade);
+
+        GradeDTO gradeDTOResult =  modelMapper.map(result, GradeDTO.class);
         return ResponseEntity
-            .created(new URI("/api/grades/" + result.getId()))
-            .body(result);
+            .created(new URI("/api/grades/" + gradeDTOResult.getId()))
+            .body(gradeDTOResult);
     }
     
     @PutMapping("/grades/{id}")
-    public ResponseEntity<Grade> updateGrade(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Grade grade)
+    public ResponseEntity<GradeDTO> updateGrade(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody GradeDTO gradeDTO)
         throws URISyntaxException {
+        Grade grade = modelMapper.map(gradeDTO, Grade.class);
         log.debug("REST request to update Grade : {}, {}", id, grade);
         if (grade.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entity not found");
@@ -60,9 +69,10 @@ public class GradeResource {
         }
 
         Grade result = gradeService.save(grade);
+        GradeDTO gradeDTOResult =  modelMapper.map(result, GradeDTO.class);
         return ResponseEntity
             .ok()
-            .body(result);
+            .body(gradeDTOResult);
     }
     
     @GetMapping("/grades")

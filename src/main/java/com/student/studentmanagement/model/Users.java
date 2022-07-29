@@ -51,5 +51,4 @@ public class Users {
 
     @ElementCollection(fetch = FetchType.EAGER)
     List<UserRole> appUserRoles;
-
 }

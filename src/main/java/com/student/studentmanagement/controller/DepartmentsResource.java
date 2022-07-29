@@ -1,9 +1,11 @@
 package com.student.studentmanagement.controller;
 
+import com.student.studentmanagement.dto.DepartmentsDTO;
 import com.student.studentmanagement.model.Course;
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.repository.DepartmentsRepository;
 import com.student.studentmanagement.service.DepartmentsService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,14 +27,19 @@ public class DepartmentsResource {
     private final Logger log = LoggerFactory.getLogger(DepartmentsResource.class);
     private final DepartmentsService departmentsService;
     private final DepartmentsRepository departmentsRepository;
+    private final ModelMapper modelMapper;
 
-    public DepartmentsResource(DepartmentsService departmentsService, DepartmentsRepository departmentsRepository) {
+
+    public DepartmentsResource(DepartmentsService departmentsService, DepartmentsRepository departmentsRepository, ModelMapper modelMapper) {
         this.departmentsService = departmentsService;
         this.departmentsRepository = departmentsRepository;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/departments")
-    public ResponseEntity<Departments> createDepartments(@Valid @RequestBody Departments departments) throws URISyntaxException {
+    public ResponseEntity<DepartmentsDTO> createDepartments(@Valid @RequestBody DepartmentsDTO departmentsDTO) throws URISyntaxException {
+
+        Departments departments = modelMapper.map(departmentsDTO, Departments.class);
         log.debug("REST request to save Departments : {}", departments);
         if (departments.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new departments cannot already have an ID");
@@ -43,16 +50,18 @@ public class DepartmentsResource {
         }
 
         Departments result = departmentsService.save(departments);
+        DepartmentsDTO departmentsDTOResult = modelMapper.map(result, DepartmentsDTO.class);
         return ResponseEntity
-            .created(new URI("/api/departments/" + result.getId()))
-            .body(result);
+            .created(new URI("/api/departments/" + departmentsDTOResult.getId()))
+            .body(departmentsDTOResult);
     }
 
     @PutMapping("/departments/{id}")
-    public ResponseEntity<Departments> updateDepartments(
+    public ResponseEntity<DepartmentsDTO> updateDepartments(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Departments departments
+        @Valid @RequestBody DepartmentsDTO departmentsDTO
     ) {
+        Departments departments = modelMapper.map(departmentsDTO, Departments.class);
         log.debug("REST request to update Departments : {}, {}", id, departments);
         if (departments.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid id");
@@ -66,9 +75,10 @@ public class DepartmentsResource {
         }
 
         Departments result = departmentsService.save(departments);
+        DepartmentsDTO departmentsDTOResult = modelMapper.map(result, DepartmentsDTO.class);
         return ResponseEntity
             .ok()
-            .body(result);
+            .body(departmentsDTOResult);
     }
     
     @GetMapping("/departments")

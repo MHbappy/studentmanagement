@@ -65,8 +65,8 @@ public class UserService {
     return userRepository.findByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
   }
 
-  public String refresh(String username) {
-    return jwtTokenProvider.createToken(username, userRepository.findByEmail(username).getAppUserRoles());
-  }
+//  public String refresh(String username) {
+//    return jwtTokenProvider.createToken(username, userRepository.findByEmail(username).getAppUserRoles());
+//  }
 
 }

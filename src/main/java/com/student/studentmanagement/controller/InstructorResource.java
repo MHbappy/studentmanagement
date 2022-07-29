@@ -1,17 +1,17 @@
 package com.student.studentmanagement.controller;
 
+import com.student.studentmanagement.dto.InstructorDTO;
 import com.student.studentmanagement.model.Instructor;
 import com.student.studentmanagement.repository.InstructorRepository;
 import com.student.studentmanagement.service.InstructorService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,14 +26,18 @@ public class InstructorResource {
     private final Logger log = LoggerFactory.getLogger(InstructorResource.class);
     private final InstructorService instructorService;
     private final InstructorRepository instructorRepository;
+    private final ModelMapper modelMapper;
 
-    public InstructorResource(InstructorService instructorService, InstructorRepository instructorRepository) {
+    public InstructorResource(InstructorService instructorService, InstructorRepository instructorRepository, ModelMapper modelMapper) {
         this.instructorService = instructorService;
         this.instructorRepository = instructorRepository;
+        this.modelMapper = modelMapper;
     }
     
     @PostMapping("/instructors")
-    public ResponseEntity<Instructor> createInstructor(@Valid @RequestBody Instructor instructor) throws URISyntaxException {
+    public ResponseEntity<InstructorDTO> createInstructor(@Valid @RequestBody InstructorDTO instructorDTO) throws URISyntaxException {
+
+        Instructor instructor = modelMapper.map(instructorDTO, Instructor.class);
         log.debug("REST request to save Instructor : {}", instructor);
         if (instructor.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Instructor not found.");
@@ -41,18 +45,19 @@ public class InstructorResource {
         if (instructorRepository.existsByTeacherId(instructor.getTeacherId())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Duplicate teacther ID.");
         }
-
-
         Instructor result = instructorService.save(instructor);
+        InstructorDTO instructorDTOResult = modelMapper.map(result, InstructorDTO.class);
         return ResponseEntity
-            .created(new URI("/api/instructors/" + result.getId()))
-            .body(result);
+            .created(new URI("/api/instructors/" + instructorDTOResult.getId()))
+            .body(instructorDTOResult);
     }
     
     @PutMapping("/instructors/{id}")
-    public ResponseEntity<Instructor> updateInstructor(
+    public ResponseEntity<InstructorDTO> updateInstructor(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Instructor instructor) {
+        @Valid @RequestBody InstructorDTO instructorDTO) {
+
+        Instructor instructor = modelMapper.map(instructorDTO, Instructor.class);
         log.debug("REST request to update Instructor : {}, {}", id, instructor);
         if (instructor.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entity not found");
@@ -65,9 +70,10 @@ public class InstructorResource {
         }
 
         Instructor result = instructorService.save(instructor);
+        InstructorDTO instructorDTOResult = modelMapper.map(result, InstructorDTO.class);
         return ResponseEntity
             .ok()
-            .body(result);
+            .body(instructorDTOResult);
     }
 
     @GetMapping("/instructors")

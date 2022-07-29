@@ -2,7 +2,6 @@ package com.student.studentmanagement.repository;
 
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.model.Instructor;
-import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.service.InstructorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

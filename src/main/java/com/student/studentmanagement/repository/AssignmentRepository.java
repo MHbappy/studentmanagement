@@ -1,6 +1,7 @@
 package com.student.studentmanagement.repository;
 
 import com.student.studentmanagement.model.Assignment;
+import com.student.studentmanagement.model.Student;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,5 @@ import java.util.Optional;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     List<Assignment> findAllByIsActive(Boolean isActive);
+    List<Assignment> findAllByStudentAndIsActive(Student student, Boolean isActive);
 }
