@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +42,11 @@ public class StudentResource {
     @PostMapping("/students")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) throws URISyntaxException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         Student student = modelMapper.map(studentDTO, Student.class);
+        LocalDate dob = LocalDate.parse(studentDTO.getDob());
+        student.setDob(dob);
 
         log.debug("REST request to save Student : {}", student);
         if (student.getId() != null) {
@@ -53,6 +60,7 @@ public class StudentResource {
         if (studentRepository.existsByContactNumber(student.getContactNumber())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an contact number.");
         }
+
         Student result = studentService.save(student);
         StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
         return ResponseEntity
@@ -67,6 +75,7 @@ public class StudentResource {
          @RequestBody StudentDTO studentDTO
     ) {
         Student student = modelMapper.map(studentDTO, Student.class);
+
         log.debug("REST request to update Student : {}, {}", id, student);
         if (student.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
@@ -79,6 +88,9 @@ public class StudentResource {
         if (!studentRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entity not found.");
         }
+
+        LocalDate dob = LocalDate.parse(studentDTO.getDob());
+        student.setDob(dob);
 
         Student result = studentService.save(student);
         StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);

@@ -1,5 +1,7 @@
 package com.student.studentmanagement;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.student.studentmanagement.model.UserRole;
 import com.student.studentmanagement.model.Users;
 import com.student.studentmanagement.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,6 +31,14 @@ public class StudentmanagementApplication implements CommandLineRunner {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
+	}
+
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	@PostConstruct
+	public void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
 	}
 
 	@Override
