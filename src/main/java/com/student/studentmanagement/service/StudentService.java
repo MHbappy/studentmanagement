@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface StudentService {
     Student save(Student student);
+    Student updateSave(Student student);
     Optional<Student> partialUpdate(Student student);
     List<Student> findAll();
     List<Student> findAllByIsActive(Boolean isActive);

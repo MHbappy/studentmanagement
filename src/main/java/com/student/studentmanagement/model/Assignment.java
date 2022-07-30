@@ -18,7 +18,6 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "assignment")
 @Data
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Assignment {

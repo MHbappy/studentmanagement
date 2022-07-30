@@ -61,6 +61,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student updateSave(Student student) {
+        log.debug("Request to save Student : {}", student);
+        return studentRepository.save(student);
+    }
+
+    @Override
     public Optional<Student> partialUpdate(Student student) {
         log.debug("Request to partially update Student : {}", student);
 

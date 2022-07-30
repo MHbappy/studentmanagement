@@ -88,11 +88,13 @@ public class StudentResource {
         if (!studentRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entity not found.");
         }
+        LocalDate dob;
+        if (studentDTO.getDob() != null){
+            dob = LocalDate.parse(studentDTO.getDob());
+            student.setDob(dob);
+        }
 
-        LocalDate dob = LocalDate.parse(studentDTO.getDob());
-        student.setDob(dob);
-
-        Student result = studentService.save(student);
+        Student result = studentService.updateSave(student);
         StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
         return ResponseEntity
             .ok()
