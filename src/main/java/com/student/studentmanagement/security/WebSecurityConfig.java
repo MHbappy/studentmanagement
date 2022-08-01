@@ -32,9 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.cors().configurationSource(corsConfigurationSource());
     http.csrf().disable();
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    http.authorizeRequests()//
-        .antMatchers("/users/signin").permitAll()//
-        .antMatchers("/users/signup").permitAll()//
+    http.authorizeRequests()
+            .antMatchers("/api/studentsRegistration").permitAll()
+        .antMatchers("/users/signin").permitAll()
+        .antMatchers("/users/signup").permitAll()
         .antMatchers("/h2-console/**/**").permitAll()
             .antMatchers(
             HttpMethod.GET,

@@ -68,6 +68,35 @@ public class StudentResource {
             .body(studentDTOResult);
     }
 
+
+    @PostMapping("/studentsRegistration")
+    public ResponseEntity<StudentDTO> registrationStudent(@Valid @RequestBody StudentDTO studentDTO) throws URISyntaxException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        Student student = modelMapper.map(studentDTO, Student.class);
+        LocalDate dob = LocalDate.parse(studentDTO.getDob());
+        student.setDob(dob);
+
+        log.debug("REST request to save Student : {}", student);
+        if (student.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
+        }
+
+        if (studentRepository.existsByStudentId(student.getStudentId())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an ID.");
+        }
+
+        if (studentRepository.existsByContactNumber(student.getContactNumber())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an contact number.");
+        }
+
+        Student result = studentService.save(student);
+        StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
+        return ResponseEntity
+                .created(new URI("/api/students/" + studentDTOResult.getId()))
+                .body(studentDTOResult);
+    }
+
     @PutMapping("/students/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<StudentDTO> updateStudent(
