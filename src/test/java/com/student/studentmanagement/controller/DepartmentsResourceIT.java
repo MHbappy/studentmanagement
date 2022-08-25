@@ -1,6 +1,7 @@
 package com.student.studentmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.student.studentmanagement.dto.DepartmentsDTO;
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.repository.DepartmentsRepository;
 import com.student.studentmanagement.service.DepartmentsService;
@@ -42,9 +43,10 @@ public class DepartmentsResourceIT {
     void createDepartments() throws Exception {
         Long id = 1l;
         Departments departments = new Departments(null, "CSE", true);
+        DepartmentsDTO departmentsDTO = new DepartmentsDTO(null, "CSE", true);
         when(departmentsService.save(departments)).thenReturn(departments);
         restStudentMockMvc.perform(post("/api/departments").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(departments)))
+                .content(objectMapper.writeValueAsString(departmentsDTO)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -70,12 +72,14 @@ public class DepartmentsResourceIT {
         Long id = 1l;
         Departments departmentsReturn = new Departments(id, "CSE", true);
         Departments departmentsSave = new Departments(id, "BBA", true);
+        DepartmentsDTO departmentsDTO = new DepartmentsDTO(id, "BBA", true);
+
         when(departmentsService.save(departmentsSave)).thenReturn(departmentsSave);
         when(departmentsService.findOne(id)).thenReturn(Optional.of(departmentsReturn));
         when(departmentsRepository.existsById(id)).thenReturn(true);
         restStudentMockMvc.perform(put("/api/departments/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(departmentsSave)))
+                .content(objectMapper.writeValueAsString(departmentsDTO)))
                 .andExpect(status().isOk());
     }
 

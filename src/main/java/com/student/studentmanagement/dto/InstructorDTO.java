@@ -1,10 +1,15 @@
 package com.student.studentmanagement.dto;
 
 import com.student.studentmanagement.model.Departments;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class InstructorDTO {
     private Long id;
     private String firstName;

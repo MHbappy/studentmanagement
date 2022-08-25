@@ -1,6 +1,7 @@
 package com.student.studentmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.student.studentmanagement.dto.InstructorDTO;
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.model.Instructor;
 import com.student.studentmanagement.repository.InstructorRepository;
@@ -43,10 +44,11 @@ public class InstructorResourceIT {
         Departments departments = new Departments();
         departments.setId(1l);
         Instructor instructor =  new Instructor(null, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
+        InstructorDTO instructorDTO =  new InstructorDTO(null, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
 
         when(instructorService.save(instructor)).thenReturn(instructor);
         restStudentMockMvc.perform(post("/api/instructors").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(instructor)))
+                .content(objectMapper.writeValueAsString(instructorDTO)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -78,16 +80,20 @@ public class InstructorResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        Instructor instructorSave = new Instructor(1l, "Instructor1", "Name1", "local@local", "0000000", "str1", 20, "", true, departments);
-        Instructor instructorReturn = new Instructor(null, "Instructor2", "Name2", "local@local", "0000000", "str2", 20, "", true, departments);
+        Instructor instructorSave = new Instructor(1l, "Instructor2", "Name2", "local@local", "0000000", "str2", 20, "", true, departments);
+        Instructor instructorReturn = new Instructor(1l, "Instructor 1", "Name 1", "local@local", "0000000", "str1", 20, "", true, departments);
+        InstructorDTO instructorDTO = new InstructorDTO(1l, "Instructor2", "Name2", "local@local", "0000000", "str2", 20, "", true, departments);
 
         when(instructorService.save(instructorSave)).thenReturn(instructorSave);
-        when(instructorService.findOne(id)).thenReturn(Optional.of(instructorReturn));
+        when(instructorRepository.save(instructorSave)).thenReturn(instructorReturn);
         when(instructorRepository.existsById(id)).thenReturn(true);
         restStudentMockMvc.perform(put("/api/instructors/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(instructorSave)))
+                .content(objectMapper.writeValueAsString(instructorDTO)))
                 .andExpect(status().isOk());
     }
+
+
+
 
 }

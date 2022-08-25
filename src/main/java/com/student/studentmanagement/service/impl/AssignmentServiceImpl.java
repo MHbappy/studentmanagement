@@ -96,7 +96,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 //        Set<String> roles = userDetails.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
 
 //        securityUtils.getUserName()
-        Student student = studentRepository.findByUseName(securityUtils.getUserName());
+        Student student = studentRepository.findByUseNameAndIsActive(securityUtils.getUserName(), true);
         if (securityUtils.getRoles().contains("ROLE_CLIENT")){
             return assignmentRepository.findAllByStudentAndIsActive(student, true);
         }

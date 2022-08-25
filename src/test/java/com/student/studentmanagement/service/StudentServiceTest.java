@@ -48,6 +48,7 @@ public class StudentServiceTest {
 
     @Test
     void testSave(){
+        student.setEmail("hello@hello");
         when(studentService.save(student)).thenReturn(student);
         Assertions.assertNotNull(student);
     }

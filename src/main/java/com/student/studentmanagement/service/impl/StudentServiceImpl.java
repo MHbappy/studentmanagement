@@ -3,6 +3,7 @@ import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.model.UserRole;
 import com.student.studentmanagement.model.Users;
 import com.student.studentmanagement.repository.StudentRepository;
+import com.student.studentmanagement.repository.UserRepository;
 import com.student.studentmanagement.service.StudentService;
 import com.student.studentmanagement.service.UserService;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student save(Student student) {
-        log.debug("Request to save Student : {}", student);
+        log.debug("Request to save Student : {}N", student);
         List<UserRole> userRoles = new ArrayList<>();
         userRoles.add(UserRole.ROLE_CLIENT);
 //        String encodedPassword = passwordEncoder.encode(student.getPassword());

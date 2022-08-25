@@ -1,6 +1,7 @@
 package com.student.studentmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.student.studentmanagement.dto.CourseDTO;
 import com.student.studentmanagement.model.Course;
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.repository.CourseRepository;
@@ -37,15 +38,18 @@ public class CourseResourceIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+
     @Test
     void createCourses() throws Exception {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
         Course CoursesReturn = new Course(null, "Courses", "Code 123", true, departments);
+        CourseDTO CoursesReturn1 = new CourseDTO(null, "Courses", "Code 123", true, departments);
         when(courseService.save(CoursesReturn)).thenReturn(CoursesReturn);
         restStudentMockMvc.perform(post("/api/courses").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(CoursesReturn)))
+                .content(objectMapper.writeValueAsString(CoursesReturn1)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -77,12 +81,14 @@ public class CourseResourceIT {
         departments.setId(1l);
         Course coursesReturn = new Course(1l, "Courses", "Code 123", true, departments);
         Course coursesSave = new Course(1l, "Courses 1", "Code 1567", true, departments);
+        CourseDTO courseDTO = new CourseDTO(1l, "Courses 1", "Code 1567", true, departments);
+
         when(courseService.save(coursesSave)).thenReturn(coursesSave);
         when(courseService.findOne(id)).thenReturn(Optional.of(coursesReturn));
         when(courseRepository.existsById(id)).thenReturn(true);
         restStudentMockMvc.perform(put("/api/courses/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(coursesSave)))
+                .content(objectMapper.writeValueAsString(courseDTO)))
                 .andExpect(status().isOk());
     }
     

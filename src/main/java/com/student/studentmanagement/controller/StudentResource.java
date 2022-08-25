@@ -1,8 +1,10 @@
 package com.student.studentmanagement.controller;
 import com.student.studentmanagement.dto.StudentDTO;
 import com.student.studentmanagement.model.Student;
+import com.student.studentmanagement.model.Users;
 import com.student.studentmanagement.repository.StudentRepository;
 import com.student.studentmanagement.service.StudentService;
+import com.student.studentmanagement.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,13 @@ public class StudentResource {
     private final StudentService studentService;
     private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
+    private final UserService userService;
 
-    public StudentResource(StudentService studentService, StudentRepository studentRepository, ModelMapper modelMapper) {
+    public StudentResource(StudentService studentService, StudentRepository studentRepository, ModelMapper modelMapper, UserService userService) {
         this.studentService = studentService;
         this.studentRepository = studentRepository;
         this.modelMapper = modelMapper;
+        this.userService = userService;
     }
 
     @PostMapping("/students")
@@ -45,8 +49,13 @@ public class StudentResource {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         Student student = modelMapper.map(studentDTO, Student.class);
-        LocalDate dob = LocalDate.parse(studentDTO.getDob());
-        student.setDob(dob);
+
+        if (studentDTO.getDob() != null){
+            LocalDate dob = LocalDate.parse(studentDTO.getDob());
+            student.setDob(dob);
+        }else {
+            student.setDob(null);
+        }
 
         log.debug("REST request to save Student : {}", student);
         if (student.getId() != null) {
@@ -60,7 +69,7 @@ public class StudentResource {
         if (studentRepository.existsByContactNumber(student.getContactNumber())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an contact number.");
         }
-
+        studentDTO.setIsActive(true);
         Student result = studentService.save(student);
         StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
         return ResponseEntity
@@ -71,8 +80,6 @@ public class StudentResource {
 
     @PostMapping("/studentsRegistration")
     public ResponseEntity<StudentDTO> registrationStudent(@Valid @RequestBody StudentDTO studentDTO) throws URISyntaxException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         Student student = modelMapper.map(studentDTO, Student.class);
         LocalDate dob = LocalDate.parse(studentDTO.getDob());
         student.setDob(dob);
@@ -90,6 +97,7 @@ public class StudentResource {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A new student cannot already have an contact number.");
         }
 
+        student.setIsActive(true);
         Student result = studentService.save(student);
         StudentDTO studentDTOResult = modelMapper.map(result, StudentDTO.class);
         return ResponseEntity
@@ -152,7 +160,11 @@ public class StudentResource {
         Optional<Student> student = studentService.findOne(id);
         if (student.isPresent()){
             student.get().setIsActive(false);
-            studentService.save(student.get());
+            studentService.updateSave(student.get());
+            Users users = userService.findByEmailAndIsActive(student.get().getEmail(), true);
+            if (users != null){
+                userService.inactiveUser(users);
+            }
             return ResponseEntity.ok(true);
         }
         return ResponseEntity.ok(false);

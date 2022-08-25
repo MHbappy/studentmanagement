@@ -1,6 +1,7 @@
 package com.student.studentmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.student.studentmanagement.dto.GradeDTO;
 import com.student.studentmanagement.model.Grade;
 import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.repository.GradeRepository;
@@ -46,9 +47,10 @@ public class GradeResourceIT {
         Student student = new Student();
         student.setId(1l);
         Grade grade = new Grade(null, "A+", 90, true, student);
+        GradeDTO gradeDTO = new GradeDTO(null, "A+", 90, true, student);
         when(gradeService.save(grade)).thenReturn(grade);
         restStudentMockMvc.perform(post("/api/grades").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(grade)))
+                .content(objectMapper.writeValueAsString(gradeDTO)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -80,12 +82,14 @@ public class GradeResourceIT {
         student.setId(1l);
         Grade gradeReturn = new Grade(1l, "A+", 90, true, student);
         Grade gradeUpdateSave = new Grade(1l, "B+", 90, true, student);
+        GradeDTO gradeDTO = new GradeDTO(1l, "B+", 90, true, student);
+
         when(gradeService.save(gradeUpdateSave)).thenReturn(gradeUpdateSave);
         when(gradeService.findOne(id)).thenReturn(Optional.of(gradeReturn));
         when(gradeRepository.existsById(id)).thenReturn(true);
         restStudentMockMvc.perform(put("/api/grades/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(gradeUpdateSave)))
+                .content(objectMapper.writeValueAsString(gradeDTO)))
                 .andExpect(status().isOk());
     }
 

@@ -74,7 +74,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public List<Grade> findAllByIsActive(Boolean isActive) {
-        Student student = studentRepository.findByUseName(securityUtils.getUserName());
+        Student student = studentRepository.findByUseNameAndIsActive(securityUtils.getUserName(), true);
         if (securityUtils.getRoles().contains("ROLE_CLIENT")){
             return gradeRepository.findAllByStudentAndIsActive(student, true);
         }

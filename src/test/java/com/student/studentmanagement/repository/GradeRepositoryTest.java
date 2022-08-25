@@ -2,6 +2,7 @@ package com.student.studentmanagement.repository;
 
 import com.student.studentmanagement.model.Grade;
 import com.student.studentmanagement.model.Student;
+import com.student.studentmanagement.service.GradeService;
 import com.student.studentmanagement.service.GradeServiceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class GradeRepositoryTest {
     GradeRepository gradeRepository;
 
     @Autowired
-    GradeServiceTest gradeService;
+    GradeService gradeService;
 
     @Test
     void test_findAllByIsActive(){

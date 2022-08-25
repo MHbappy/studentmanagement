@@ -1,8 +1,10 @@
 package com.student.studentmanagement.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.student.studentmanagement.dto.StudentDTO;
 import com.student.studentmanagement.model.Departments;
 import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.repository.StudentRepository;
+import com.student.studentmanagement.repository.UserRepository;
 import com.student.studentmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,6 +30,9 @@ public class StudentResourceIT {
     private StudentRepository studentRepository;
 
     @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
     private StudentService studentService;
 
     @Autowired
@@ -36,19 +41,17 @@ public class StudentResourceIT {
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @Autowired
-//    private UserService userService;
 
     @Test
     void createStudent() throws Exception {
         Departments departments = new Departments();
         departments.setId(1l);
         String userName = "user@user";
-        Student student2 = new Student(null, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", null, true, userName, "123", departments);
+        Student student2 = new Student(null, "Mehedi", "Hasan", "local@local1", "123-35-322", "88888888", "address", null, true, userName, "123", departments);
+        StudentDTO studentDTO = new StudentDTO(null, "Mehedi", "Hasan", "local@local1", "123-35-322", "88888888", "address", null, true, userName, "123", departments);
         when(studentService.save(student2)).thenReturn(student2);
-
         restStudentMockMvc.perform(post("/api/students").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(student2)))
+                .content(objectMapper.writeValueAsString(studentDTO)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -59,8 +62,8 @@ public class StudentResourceIT {
         Departments departments = new Departments();
         departments.setId(1l);
         String userName = "user@user";
-        Student student = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", LocalDate.now(), true, userName, "pass", departments);
-        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+        Student student = new Student(id, "Mehedi", "Hasan", "local@local.com", "123-35-322", "88888888", "address", null, true, userName, "pass", departments);
+        when(studentService.findOne(id)).thenReturn(Optional.of(student));
         restStudentMockMvc.perform(get("/api/students/{id}", id)).andExpect(status().isOk());
     }
 
@@ -71,7 +74,6 @@ public class StudentResourceIT {
         Departments departments = new Departments();
         departments.setId(1l);
         String userName = "user@user";
-
         Student student = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", LocalDate.now(), true, userName, "pass", departments);
         when(studentRepository.findById(id)).thenReturn(Optional.of(student));
         restStudentMockMvc.perform(delete("/api/students/{id}", id)).andExpect(status().isOk());
@@ -83,9 +85,9 @@ public class StudentResourceIT {
         Long id = 1l;
         Departments departments = new Departments();
         departments.setId(1l);
-        String userName = "user@user";
+        String userName = "user1@user1";
         Student studentUpdate = new Student(id, "Mehedi", "Hasan", "local@local", "123-35-322", "88888888", "address", null, true, userName, "pass", departments);
-        when(studentService.save(studentUpdate)).thenReturn(studentUpdate);
+        when(studentService.updateSave(studentUpdate)).thenReturn(studentUpdate);
         when(studentService.findOne(id)).thenReturn(Optional.of(studentUpdate));
         restStudentMockMvc.perform(get("/api/students/{id}", id)).andExpect(status().isOk());
     }
